@@ -2,7 +2,7 @@ import { jsPDF } from "jspdf";
 
 export const printPDF = (sale) => {
   const doc = new jsPDF();
-  doc.text("Store Name", 10, 10);
+  doc.text("Aushadhapoorna", 10, 10);
   doc.text("Thank you for your purchase!", 10, 20);
   doc.text("---- Receipt ----", 10, 30);
 

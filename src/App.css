@@ -1,38 +1,169 @@
-.App {
+/* App.css */
+
+/* General styles */
+body {
+  font-family: 'Inter', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f9f9f9;
+  color: #333;
+}
+
+/* Container styles */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 16px;
+}
+
+/* Button styles */
+button {
+  transition: background-color 0.2s, transform 0.2s;
+}
+
+button:hover {
+  background-color: #2563eb; /* Darker blue */
+  transform: scale(1.05);
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+/* Card styles for Menu Items */
+.menu-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.menu-item:hover {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Cart styles */
+.cart {
+  background: #f1f5f9;
+  padding: 16px;
+  border-radius: 8px;
+  border: 1px solid #e2e8f0;
+}
+
+.cart-header {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.cart-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.cart-item:last-child {
+  border-bottom: none;
+}
+
+/* Total price section */
+.total-price {
+  margin-top: 16px;
+  font-size: 1.25rem;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Sales summary styles */
+.sales-summary {
+  background: #ffffff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sales-summary h2 {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 16px;
+}
+
+.sales-summary ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sales-summary li {
+  margin-bottom: 8px;
+  padding: 8px;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.sales-summary li:last-child {
+  border-bottom: none;
+}
+
+/* Receipt styles */
+#receipt {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 14px;
+  line-height: 1.5;
+  border: 1px solid #e5e7eb;
+  padding: 16px;
+  border-radius: 8px;
+  background: #ffffff;
+  width: 300px;
+  margin: 0 auto;
+}
+
+#receipt h2 {
+  font-size: 1.25rem;
+  margin-bottom: 12px;
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+#receipt ul {
+  list-style: none;
+  padding: 0;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
+#receipt ul li {
+  margin-bottom: 8px;
+}
+
+#receipt p {
+  margin-top: 12px;
+  font-weight: bold;
+  text-align: right;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .grid-cols-2 {
+    grid-template-columns: repeat(1, minmax(0, 1fr));
+  }
+
+  .menu-item {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .cart {
+    margin-top: 16px;
   }
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
+@media (max-width: 480px) {
+  .container {
+    padding: 8px;
   }
-  to {
-    transform: rotate(360deg);
+
+  #receipt {
+    width: 100%;
   }
 }
