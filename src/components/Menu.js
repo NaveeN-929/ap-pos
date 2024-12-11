@@ -3,11 +3,11 @@ import { CartContext } from "../contexts/CartContext";
 
 const Menu = () => {
   const menuItems = [
-    { id: 1, name: "soup", price: 48 },
-    { id: 2, name: "ragi laddu", price: 15 },
-    { id: 3, name: "pearl laddu", price: 20 },
-    { id: 3, name: "foxtail laddu", price: 20 },
-    { id: 3, name: " laddu", price: 20 },
+    { id: 1, name: "Soup", price: 46 },
+    { id: 2, name: "Ragi laddu", price: 26 },
+    { id: 3, name: "Pearl laddu", price: 26 },
+    { id: 3, name: "Foxtail laddu", price: 26 },
+    { id: 3, name: "Barnyard laddu", price: 26 },
 
   ];
 

@@ -39,6 +39,12 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|otf)$/,
         use: ['file-loader'],
       },
+      {
+        test: /\.js$/,
+        enforce: 'pre',
+        use: ['source-map-loader'],
+        exclude: /node_modules\/html2pdf\.js/, // Exclude the problematic library
+      },
     ],
   },
   resolve: {

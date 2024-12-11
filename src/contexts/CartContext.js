@@ -1,4 +1,4 @@
-import React, { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 import { addSale } from "../db/indexedDB";
 import { printReceipt } from "../components/Receipt";
 
@@ -22,8 +22,12 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addItem, removeItem, checkout }}>
+    <CartContext.Provider value={{ cart, setCart, addItem, removeItem, checkout }}>
       {children}
     </CartContext.Provider>
   );
 };
+
+
+// Custom hook to use CartContext
+export const useCart = () => useContext(CartContext);
