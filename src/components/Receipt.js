@@ -1,154 +1,110 @@
-import EscPosEncoder from "esc-pos-encoder";
-import html2pdf from "html2pdf.js";
-import logo from "../images/logo.webp";
+import { jsPDF } from "jspdf";
+import logo from "../images/logo.png";
 
-export const printReceipt = async (sale, clearCart) => {
-  try {
-    const encoder = new EscPosEncoder();
-    encoder.initialize();
+// Function to handle the printing of the receipt
+export const printReceipt = (sale, callback) => {
+  const { items, subtotal, cgst, sgst, roundedTotal } = sale;
 
-    // Fetch current date and time
-    const now = new Date();
-    const date = now.toLocaleDateString();
-    const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const doc = new jsPDF({ unit: "mm", format: [80, 80] }); // Thermal printer dimensions
 
-    // Load the logo image for the receipt
-    const logoImage = await loadImage(logo);
+  // Set font for the document
+  doc.setFont("helvetica");
 
-    encoder
-      .setAlign("center")
-      .image(logoImage, 384, 128) // Adjust dimensions for thermal printer compatibility
-      // .newline()
-      .text("Aushadhapoorna")
-      // .newline()
-      // .text("NH 3, Mumbai Nashik Highway")
-      // .newline()
-      // .text("Opp. Bhoir Pada Bus Stop, Near Padga")
-      // .newline()
-      // .text("Bhiwandi, Thane")
-      .newline()
-      .text("----------------------------------------")
-      // .newline()
-      .text(`Date: ${date}`.padEnd(20, " ") + `Time: ${time}`)
-      .newline()
-      .text(`GST: 2025DPPPK9628F`)
-      .newline()
-      .text("Tax Invoice")
-      .newline()
-      .text("----------------------------------------")
-      .newline();
+  // Logo - resized and centered
+  const imgWidth = 13;
+  const imgHeight = 10;
+  const pageWidth = doc.internal.pageSize.getWidth();
+  doc.addImage(logo, "webp", (pageWidth - imgWidth) / 2, 2, imgWidth, imgHeight);
 
-    // Add table header
-    encoder
-      .text("Particulars".padEnd(20, " ") + "Qty".padEnd(5, " ") + "Rate".padEnd(7, " ") + "Amount")
-      .newline()
-      .text("----------------------------------------")
-      .newline();
+  // Header Section - Center aligned
+  doc.setFontSize(10);
+  doc.text("Aushadhapoorna", pageWidth / 2, 15, { align: "center" });
+  doc.setFontSize(6);
+  doc.text("ph 9535354685", pageWidth / 2, 17.5, { align: "center" });
 
-    // Add sale items
-    sale.items.forEach((item) => {
-      encoder
-        .text(
-          `${item.name.padEnd(20, " ")}${item.quantity.toString().padEnd(5, " ")}₹${item.price
-            .toFixed(2)
-            .padEnd(7, " ")}₹${(item.price * item.quantity).toFixed(2)}`
-        )
-        .newline();
-    });
+  doc.setFontSize(8);
+  doc.text("GST: 2025DPPPK9628F", pageWidth / 2, 21, { align: "center" });
 
-    encoder
-      .newline()
-      .text("----------------------------------------")
-      .newline()
-      .text(`Subtotal`.padEnd(30, " ") + `₹${sale.subtotal.toFixed(2)}`)
-      .newline()
-      .text(`S.G.S.T @9%`.padEnd(30, " ") + `₹${sale.sgst.toFixed(2)}`)
-      .newline()
-      .text(`C.G.S.T @9%`.padEnd(30, " ") + `₹${sale.cgst.toFixed(2)}`)
-      .newline()
-      .text(`Grand Total`.padEnd(30, " ") + `₹${sale.grandTotal.toFixed(2)}`)
-      .newline()
-      .text("----------------------------------------")
-      .newline()
-      .text("Thank you for your purchase!")
-      .newline()
-      .text("Visit Again")
-      .newline()
-      .newline()
-      .cut();
+  // Section separator
+  // doc.setLineWidth(0.3);
+  doc.setLineDashPattern([1, 1], 0); 
+  doc.line(2, 22, pageWidth - 2, 22); // Horizontal line
 
-    // Send to thermal printer
-    const bluetoothDevice = await navigator.bluetooth.requestDevice({
-      acceptAllDevices: true,
-    });
-    const server = await bluetoothDevice.gatt.connect();
-    const service = await server.getPrimaryService("printer-service-uuid"); // Replace with your printer's UUID
-    const characteristic = await service.getCharacteristic("printer-characteristic-uuid");
-    await characteristic.writeValue(encoder.encode());
-
-    clearCart();
-  } catch (error) {
-    console.error("Thermal printing failed. Falling back to PDF.");
-    printPDF(sale);
-  }
-};
-
-const loadImage = (url) => {
-  return new Promise((resolve, reject) => {
-    const img = new Image();
-    img.src = url;
-    img.onload = () => resolve(img);
-    img.onerror = reject;
-  });
-};
-
-export const printPDF = (sale) => {
+  // Date and Time - aligned left
   const now = new Date();
   const date = now.toLocaleDateString();
-  const time = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  const time = now.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+  doc.text(`Date: ${date}`, 5, 25);
+  doc.text(`Time: ${time}`, 5, 28);
 
-  const element = document.createElement("div");
-  element.innerHTML = `
-    <div style="text-align: center;">
-      <img src="${logo}" alt="Logo" width="100" />
-      <h2>Aushadhapoorna</h2>
-      <hr />
-      <p>Date: ${date} &nbsp;&nbsp;&nbsp; Time: ${time}</p>
-      <p>GST: 2025DPPPK9628F</p>
-      <h3>Tax Invoice</h3>
-      <hr />
-    </div>
-    <table style="width: 100%; text-align: left; border-collapse: collapse;">
-      <thead>
-        <tr>
-          <th>Particulars</th>
-          <th>Qty</th>
-          <th>Rate</th>
-          <th>Amount</th>
-        </tr>
-      </thead>
-      <tbody>
-        ${sale.items
-          .map(
-            (item) =>
-              `<tr>
-                <td>${item.name}</td>
-                <td>${item.quantity}</td>
-                <td>₹${item.price.toFixed(2)}</td>
-                <td>₹${(item.price * item.quantity).toFixed(2)}</td>
-              </tr>`
-          )
-          .join("")}
-      </tbody>
-    </table>
-    <hr />
-    <p>Subtotal: ₹${sale.subtotal.toFixed(2)}</p>
-    <p>S.G.S.T @9%: ₹${sale.sgst.toFixed(2)}</p>
-    <p>C.G.S.T @9%: ₹${sale.cgst.toFixed(2)}</p>
-    <p><strong>Grand Total: ₹${sale.grandTotal.toFixed(2)}</strong></p>
-    <hr />
-    <p style="text-align: center;">Thank you for your purchase!<br>Visit Again</p>
-  `;
+  // // Section separator
+  // doc.setLineWidth(0.1);
+  // doc.line(5, 31, pageWidth - 5, 31); // Horizontal line
 
-  html2pdf().from(element).set({ filename: "receipt.pdf" }).save();
+  // Receipt Items Header - Center aligned
+  // doc.setFontSize(9);
+  // doc.text("TAX RECEIPT", pageWidth / 2, 34, { align: "center" });
+
+  // Section separator
+  // doc.setLineWidth(0.1);
+  doc.setLineDashPattern([1, 1], 0); 
+  doc.line(5, 29, pageWidth - 5, 29); // Horizontal line
+
+  // Table Headers
+  doc.setFontSize(8);
+  doc.text("Item", 5, 33);
+  doc.text("Qty", 35, 33);
+  doc.text("Rate", 50, 33);
+  doc.text("Amount", 65, 33);
+
+  // Section separator
+  // doc.setLineWidth(0.1);
+  doc.setLineDashPattern([1, 1], 0); 
+  doc.line(5, 34, pageWidth - 5, 34); // Horizontal line
+
+  let yOffset = 38;
+
+  // Items List
+  items.forEach((item) => {
+    doc.text(item.name, 5, yOffset);
+    doc.text(item.quantity.toString(), 35, yOffset);
+    doc.text(`₹${item.price.toFixed(2)}`, 46, yOffset);
+    doc.text(`₹${(item.price * item.quantity).toFixed(2)}`, 62, yOffset);
+    yOffset += 4; // Line spacing
+  });
+
+  // Line break for totals
+  doc.setLineWidth(0.1);
+  doc.line(5, yOffset, pageWidth - 5, yOffset);
+  yOffset += 3;
+
+  // Totals Section
+  doc.setFontSize(8);
+  doc.text(`Subtotal: ₹${subtotal.toFixed(2)}`, 42, yOffset);
+  yOffset += 3;
+  doc.text(`CGST(2.5%): ₹${cgst.toFixed(2)}`, 34.8, yOffset);
+  yOffset += 3;
+  doc.text(`SGST(2.5%): ₹${sgst.toFixed(2)}`, 35, yOffset);
+  yOffset += 3;
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(8);
+  doc.text(`Grand Total:₹${roundedTotal.toFixed(2)}`, 35.5, yOffset, { align: "left" });
+
+  // Footer Section
+  yOffset += 2;
+  doc.setFont("helvetica", "normal");
+  doc.setLineWidth(0.3);
+  doc.line(2, yOffset, pageWidth - 2, yOffset);
+  yOffset += 3;
+  doc.setFontSize(8);
+  doc.text("Warm, Healthy Soups Await You", pageWidth / 2, yOffset, { align: "center" });
+  yOffset += 4;
+  doc.text("See You Again Soon", pageWidth / 2, yOffset, { align: "center" });
+
+  // Optional callback to clear the cart
+  if (callback) callback();
+
+  // Print the receipt
+  doc.autoPrint();
+  doc.output("dataurlnewwindow");
 };
