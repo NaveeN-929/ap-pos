@@ -115,8 +115,8 @@ import logo from "../images/logo.png";
 
 // Bluetooth Printer Configuration
 const PRINTER_NAME = 'SC03';
-const SERVICE_UUID = 'af30'; // Replace with your printer's service UUID
-const CHARACTERISTIC_UUID = '7c3cff41'; // Replace with your printer's write characteristic UUID
+const SERVICE_UUID = '0000af30-0000-1000-8000-00805f9b34fb'; // Replace with your printer's service UUID
+const CHARACTERISTIC_UUID = '0xAE10'; // Replace with your printer's write characteristic UUID
 
 let printerCharacteristic = null;
 
