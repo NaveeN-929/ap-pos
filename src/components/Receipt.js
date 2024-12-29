@@ -45,7 +45,7 @@ export const printReceipt = async (sale, callback) => {
   receiptText += `Item        Qty   Rate   Amount\n`;
   receiptText += `--------------------------------\n`;
 
-  items.forEach((item, index) => {
+  items.forEach((item) => {
     receiptText += `${item.name.padEnd(10)} ${item.quantity.toString().padEnd(5)} ₹${item.price.toFixed(2).padEnd(6)} ₹${(
       item.price * item.quantity
     ).toFixed(2)}\n`;
@@ -73,11 +73,8 @@ export const printReceipt = async (sale, callback) => {
 
     const printer = new CatPrinter("KittyPrinter", sendDataToPrinter);
     await printer.prepare(8, 200);
-    console.log('Printer prepared');
     await printer.draw(data);
-    console.log('Data sent to printer');
     await printer.finish(100);
-    console.log('Printer finished');
 
     console.log('Receipt printed successfully!');
   } catch (error) {
