@@ -1,7 +1,6 @@
 import React from "react";
 import logo from "../images/logo.webp";
 
-
 const ReceiptPreview = ({
   items,
   subtotal,
@@ -25,9 +24,6 @@ const ReceiptPreview = ({
         <div className="text-center mb-4">
           <img src={logo} alt="Logo" className="w-20 mx-auto mb-0.2" />
           <h2 className="font-bold text-lg">Aushadhapoorna</h2>
-          {/* <p>NH 3, Mumbai Nashik Highway</p>
-          <p>Opp. Bhoir Pada Bus Stop, Near Padga</p>
-          <p>Bhiwandi, Thane</p> */}
           <hr className="my-1" />
           <p>Date: {date}</p>
           <p>Time: {time}</p>
