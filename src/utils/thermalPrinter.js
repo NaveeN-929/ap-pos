@@ -379,7 +379,7 @@
 //       await this.printSimpleText('         1         2         3   ', 1);
       
 //       // === HEADER SECTION TEST ===
-//       await this.printCenteredText('Aushadhapoorna Medical Store', 2);
+//       await this.printCenteredText('Aushadhapoorna', 2);
 //       await this.printCenteredText('Medical Complex, Health Street', 1);
 //       await this.printCenteredText('GST: 29ABCDE1234F1Z5', 1);
 //       await this.printCenteredText('12/20/2024 3:45:30 PM', 1);
@@ -1145,7 +1145,7 @@ class CatPrinter {
       await this.printSimpleText('         1         2         3   ', 1);
       
       // === HEADER SECTION TEST ===
-      await this.printCenteredText('Aushadhapoorna Medical Store', 2);
+      await this.printCenteredText('Aushadhapoorna', 2);
       await this.printCenteredText('Medical Complex, Health Street', 1);
       await this.printCenteredText('GST: 29ABCDE1234F1Z5', 1);
       await this.printCenteredText('12/20/2024 3:45:30 PM', 1);

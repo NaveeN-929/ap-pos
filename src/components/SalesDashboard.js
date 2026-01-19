@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { usePos } from '../context/PosContext';
-import * as XLSX from 'xlsx';
+import ExcelJS from 'exceljs';
 
 const SalesDashboard = () => {
   const { sales, dailySales, dailyTotal, businessInfo } = usePos();
@@ -23,7 +23,7 @@ const SalesDashboard = () => {
   const averageSale = totalSales > 0 ? totalRevenue / totalSales : 0;
 
   // Export to Excel function
-  const exportToExcel = () => {
+  const exportToExcel = async () => {
     let dataToExport = sales;
 
     // Filter by date range if specified
@@ -42,11 +42,12 @@ const SalesDashboard = () => {
       return;
     }
 
-    // Prepare data for Excel
-    const excelData = [];
-    
+    // Create a new workbook
+    const workbook = new ExcelJS.Workbook();
+    const worksheet = workbook.addWorksheet('Sales Report');
+
     // Add header row
-    excelData.push([
+    const headers = [
       'Sale ID',
       'Date',
       'Time',
@@ -58,14 +59,25 @@ const SalesDashboard = () => {
       'CGST',
       'SGST',
       'Total'
-    ]);
+    ];
+
+    worksheet.addRow(headers);
+
+    // Style the header row
+    const headerRow = worksheet.getRow(1);
+    headerRow.font = { bold: true };
+    headerRow.fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFE6E6FA' }
+    };
 
     // Add sales data
     dataToExport.forEach(sale => {
       if (sale.items && sale.items.length > 0) {
         sale.items.forEach((item, index) => {
           const itemTotal = (item.price || 0) * (item.quantity || 0);
-          excelData.push([
+          worksheet.addRow([
             sale.id || '',
             sale.date || '',
             sale.time || '',
@@ -81,7 +93,7 @@ const SalesDashboard = () => {
         });
       } else {
         // If no items, add a row with sale totals only
-        excelData.push([
+        worksheet.addRow([
           sale.id || '',
           sale.date || '',
           sale.time || '',
@@ -97,28 +109,20 @@ const SalesDashboard = () => {
       }
     });
 
-    // Create workbook and worksheet
-    const workbook = XLSX.utils.book_new();
-    const worksheet = XLSX.utils.aoa_to_sheet(excelData);
-
     // Auto-size columns
-    const columnWidths = [
-      { wch: 12 }, // Sale ID
-      { wch: 12 }, // Date
-      { wch: 12 }, // Time
-      { wch: 25 }, // Item Name
-      { wch: 10 }, // Quantity
-      { wch: 12 }, // Unit Price
-      { wch: 12 }, // Item Total
-      { wch: 12 }, // Subtotal
-      { wch: 10 }, // CGST
-      { wch: 10 }, // SGST
-      { wch: 12 }  // Total
+    worksheet.columns = [
+      { width: 12 }, // Sale ID
+      { width: 12 }, // Date
+      { width: 12 }, // Time
+      { width: 25 }, // Item Name
+      { width: 10 }, // Quantity
+      { width: 12 }, // Unit Price
+      { width: 12 }, // Item Total
+      { width: 12 }, // Subtotal
+      { width: 10 }, // CGST
+      { width: 10 }, // SGST
+      { width: 12 }  // Total
     ];
-    worksheet['!cols'] = columnWidths;
-
-    // Add worksheet to workbook
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Sales Report');
 
     // Generate filename
     const dateRange = exportStartDate && exportEndDate 
@@ -127,9 +131,21 @@ const SalesDashboard = () => {
     const filename = `sales_report${dateRange}.xlsx`;
 
     // Save file
-    XLSX.writeFile(workbook, filename);
-    
-    alert(`Sales report exported successfully as ${filename}`);
+    try {
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = filename;
+      link.click();
+      window.URL.revokeObjectURL(url);
+      
+      alert(`Sales report exported successfully as ${filename}`);
+    } catch (error) {
+      console.error('Error exporting to Excel:', error);
+      alert('Error occurred while exporting to Excel. Please try again.');
+    }
   };
 
   // Clear local storage function

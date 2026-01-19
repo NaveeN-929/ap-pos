@@ -1,4 +1,4 @@
-# 🏪 Aushadhapoorna POS System
+# Aushadhapoorna POS System
 
 A modern, web-based Point of Sale system built with React and designed specifically for thermal receipt printing via Bluetooth.
 
@@ -79,22 +79,6 @@ A modern, web-based Point of Sale system built with React and designed specifica
 - **Filter by Date**: View sales for specific dates
 - **Transaction Details**: Expand sales to see itemized details
 
-## 🏗️ Project Structure
-
-```
-src/
-├── components/           # React components
-│   ├── ProductMenu.js   # Product display and search
-│   ├── Cart.js          # Shopping cart and checkout
-│   └── SalesDashboard.js # Sales analytics and history
-├── context/             # State management
-│   └── PosContext.js    # Global POS state and actions
-├── utils/               # Utility functions
-│   └── thermalPrinter.js # Bluetooth thermal printer interface
-├── App.js               # Main application component
-├── index.js             # Application entry point
-└── index.css            # TailwindCSS imports and custom styles
-```
 
 ## 🔧 Configuration
 
@@ -179,25 +163,11 @@ npm run build
 - Web server (Apache, Nginx)
 - Local network hosting for retail environment
 
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Test thoroughly
-5. Submit a pull request
 
 ## 📄 License
 
 This project is licensed under the MIT License.
 
-## 🆘 Support
-
-For issues or questions:
-1. Check the troubleshooting section
-2. Review the browser console for errors
-3. Ensure printer compatibility
-4. Create an issue with detailed error information
 
 ---
 

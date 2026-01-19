@@ -1,0 +1,58 @@
+{
+    "menu": {
+      "title": "Menu",
+      "language": "",
+      "items": [
+        {
+          "name": "Hibiscus",
+          "description": "Antioxidant-rich, supports heart health, liver function, and weight management.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Climbing Brinjal",
+          "description": "Treats respiratory issues, boosts immunity, and relieves throat pain.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Banana Stem",
+          "description": "Detoxifies kidneys, prevents stones, aids weight loss, and improves gut health.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Wonder Berry",
+          "description": "Heals stomach ulcers, boosts liver health, and reduces inflammation.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Veldt Grape",
+          "description": "Strengthens bones, eases joint pain, and improves digestion.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Moringa",
+          "description": "Packed with nutrients, strengthens bones, boosts immunity, and aids digestion.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Mushroom",
+          "description": "Enhances immunity, supports heart health, and aids weight management.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Amla",
+          "description": "Boosts immunity, digestion, and promotes healthy skin and hair.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Tanner's Cassia",
+          "description": "Regulates sugar, cools body, detoxifies, and treats urinary infections.",
+          "price": "₹48.00"
+        },
+        {
+          "name": "Horse Gram",
+          "description": "Burns fat, controls sugar, lowers cholesterol, and prevents stones.",
+          "price": "₹48.00"
+        }
+      ]
+    }
+  }

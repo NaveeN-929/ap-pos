@@ -57,7 +57,7 @@ const Cart = () => {
       };
 
       // Complete sale in state
-      const sale = completeSale(receiptData);
+      completeSale(receiptData);
       
       // Print receipt
       console.log('🖨️ Printing receipt...');
